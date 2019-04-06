@@ -1,0 +1,22 @@
+{
+  "name": "anywhereimooc",
+  "version": "1.0.0",
+  "description": "A static resource server based on Node.js",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EWL0829/anyWhereImooc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EWL0829/anyWhereImooc/issues"
+  },
+  "homepage": "https://github.com/EWL0829/anyWhereImooc#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  }
+}
