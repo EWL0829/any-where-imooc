@@ -1,22 +1,38 @@
 {
-  "name": "anywhereimooc",
-  "version": "1.0.0",
-  "description": "A static resource server based on Node.js",
-  "main": ".eslintrc.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EWL0829/anyWhereImooc.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/EWL0829/anyWhereImooc/issues"
-  },
-  "homepage": "https://github.com/EWL0829/anyWhereImooc#readme",
-  "devDependencies": {
-    "eslint": "^5.16.0"
-  }
+    "name": "anywhereimooc",
+    "version": "1.0.0",
+    "description": "A static resource server based on Node.js",
+    "main": ".eslintrc.js",
+    "scripts": {
+        "lint": "eslint .",
+        "fix": "eslint --fix ."
+    },
+    "pre-commit": [
+        "fix",
+        "lint"
+    ],
+    "keywords": [
+        "static",
+        "webserver"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/EWL0829/anyWhereImooc.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/EWL0829/anyWhereImooc/issues"
+    },
+    "homepage": "https://github.com/EWL0829/anyWhereImooc#readme",
+    "devDependencies": {
+        "babel-eslint": "^7.2.3",
+        "eslint": "^4.5.0",
+        "pre-commit": "^1.2.2"
+    },
+    "dependencies": {
+        "chalk": "^2.4.2",
+        "handlebars": "^4.0.10",
+        "yargs": "^8.0.2"
+    }
 }
