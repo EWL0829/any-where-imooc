@@ -1,10 +1,9 @@
 # anyWhereImooc
 A static resource server based on Node.js
 
-#### How to run this project
+#### 启动项目
 
+```javascript
+supervisor src/app.js
+```
 
-#### About this project
-
-
-#### something from Author
