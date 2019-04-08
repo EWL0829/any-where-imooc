@@ -40,13 +40,13 @@ module.exports = async function (req, res, filePath) {
       * */
     } else if (stats.isDirectory()) {
       const files = await readdir(filePath);
-
       res.statusCode = 200;
       res.setHeader('Content-Type', 'text/html');
+      const dir = path.relative(conf.root, filePath);
       const data = {
         title: path.basename(filePath),
         files,
-        dir: path.relative(conf.root, filePath),
+        dir: dir ? `/${dir}` : '', // 当dir为空字符串的时候就表明已经在根目录下了
       };
       res.end(template(data));
     }
