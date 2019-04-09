@@ -5,6 +5,8 @@ const readdir = promisify(fs.readdir);
 const path = require('path');
 const HandleBars = require('handlebars');
 const conf = require('../config/defaultConfig');
+const mime = require('./mime');
+const compress = require('./compress');
 
 // 除了require之外，读取文件时的路径都使用绝对路径比较稳定
 const tplPath = path.join(__dirname, '../template/dir.tpl');
@@ -26,10 +28,17 @@ module.exports = async function (req, res, filePath) {
 
     // 如果是文件
     if (stats.isFile()) {
+      const contentType = mime(filePath);
       res.statusCode = 200;
-      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader('Content-Type', contentType);
+
       // 将对应的文件内容返回，首先从对应路径的文件中读取内容并创建一个文件流，将内容一点一点吐回给res(pipe的作用)
-      fs.createReadStream(filePath).pipe(res);
+      let rs = fs.createReadStream(filePath);
+      // 如果文件路径的拓展名能匹配到我们在config中设置的需要压缩的文件拓展名，就进行压缩输出
+      if (filePath.match(conf.compress)) {
+        rs = compress(rs, req, res);
+      }
+      rs.pipe(res);
 
       /*读取并传输文件的写法也可能是如下，
       * fs.readFile(filePath, (err, data) => {
@@ -41,6 +50,7 @@ module.exports = async function (req, res, filePath) {
     } else if (stats.isDirectory()) {
       const files = await readdir(filePath);
       res.statusCode = 200;
+      // 如果是文件夹的话，就默认使用html的网页形式进行展示
       res.setHeader('Content-Type', 'text/html');
       const dir = path.relative(conf.root, filePath);
       const data = {
