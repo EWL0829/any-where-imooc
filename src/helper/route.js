@@ -5,8 +5,10 @@ const readdir = promisify(fs.readdir);
 const path = require('path');
 const HandleBars = require('handlebars');
 const conf = require('../config/defaultConfig');
+const range = require('./range');
 const mime = require('./mime');
 const compress = require('./compress');
+const isFresh = require('./cache');
 
 // 除了require之外，读取文件时的路径都使用绝对路径比较稳定
 const tplPath = path.join(__dirname, '../template/dir.tpl');
@@ -29,11 +31,29 @@ module.exports = async function (req, res, filePath) {
     // 如果是文件
     if (stats.isFile()) {
       const contentType = mime(filePath);
-      res.statusCode = 200;
       res.setHeader('Content-Type', contentType);
 
-      // 将对应的文件内容返回，首先从对应路径的文件中读取内容并创建一个文件流，将内容一点一点吐回给res(pipe的作用)
-      let rs = fs.createReadStream(filePath);
+      if (isFresh(stats, req, res)) {
+        // 如果缓存中的信息仍旧是新鲜的，那么就返回304，且响应体为空，指示浏览器去缓存中拿数据
+        // 如果缓存中的信息不是新鲜的，那么就让请求继续
+        res.statusCode = 304;
+        res.end();
+        return;
+      }
+
+      let rs;
+      // 截取范围
+      const { start, end, code } = range(stats.size, req, res);
+
+      if (code === 200) {
+        res.statusCode = 200;
+        // 将对应的文件内容返回，首先从对应路径的文件中读取内容并创建一个文件流，将内容一点一点吐回给res(pipe的作用)
+        rs = fs.createReadStream(filePath);
+      } else {
+        res.statusCode = 206;
+        rs = fs.createReadStream(filePath, { start, end });
+      }
+
       // 如果文件路径的拓展名能匹配到我们在config中设置的需要压缩的文件拓展名，就进行压缩输出
       if (filePath.match(conf.compress)) {
         rs = compress(rs, req, res);
