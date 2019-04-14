@@ -1,0 +1,5 @@
+#! /usr/bin/env node
+
+require('../src/index');
+// 使用linux的时候，当前文件是没有执行权限的，所以需要手动添加执行权限
+

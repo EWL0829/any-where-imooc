@@ -1,8 +1,11 @@
 {
     "name": "anywhereimooc",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "A static resource server based on Node.js",
-    "main": ".eslintrc.js",
+    "main": "src/app.js",
+    "bin": {
+        "anywhere": "bin/anywhere"
+    },
     "scripts": {
         "lint": "eslint .",
         "fix": "eslint --fix ."

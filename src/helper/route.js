@@ -4,7 +4,6 @@ const stat = promisify(fs.stat);
 const readdir = promisify(fs.readdir);
 const path = require('path');
 const HandleBars = require('handlebars');
-const conf = require('../config/defaultConfig');
 const range = require('./range');
 const mime = require('./mime');
 const compress = require('./compress');
@@ -23,7 +22,7 @@ const source = fs.readFileSync(tplPath); // 由于readFileSync读取文件默认
 // 不使用上一步设置的'utf-8'文件读取类型参数是因为我们也可以强制在source上使用toString()，因为buffer的读取速度更快，读取之后再进行转化
 const template = HandleBars.compile(source.toString());
 
-module.exports = async function (req, res, filePath) {
+module.exports = async function (req, res, filePath, conf) {
   // stat用于判断对应路径下的文件/文件夹是否存在
   try {
     const stats = await stat(filePath);
