@@ -1,12 +1,6 @@
 # any-where-imooc
 A static resource server based on Node.js
 
-## 安装
-
-```
-npm i -g anywhere-imooc
-```
-
 ## 使用方法
 
 ```
